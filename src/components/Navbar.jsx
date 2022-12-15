@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 const Navbar = () => {
+    const [balance, setbalance] = useState(0)
     return (
         <div className='navbar'>
             <ul>
@@ -10,7 +11,7 @@ const Navbar = () => {
                 <li>Contact us</li>
             </ul>
             <ul className='side'>
-                <li>$</li>
+                <li>$ {balance}</li>
                 <li>Welcome</li>
                 <li>logout</li>
             </ul>

@@ -1,42 +1,64 @@
 import React from 'react'
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Button, Modal } from 'react-bootstrap';
 
 const Tables = () => {
-    
+   const [toggle, settoggle] = useState(false);
+    const [data, setdata] = useState([{
+            title:"Title",
+            tagline:"tagline",
+            note:"Note"
+        }]);
+        useEffect(() => {
+            axios
+                .get(`http://localhost:9020/user`)
+                .then(res => {
+                   
+                    setdata(res.data);
+                    console.log(res.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }, [])
+       
   return (
-    <table class="content-table">
+    <table className="content-table">
     <thead>
       <tr>
         <th>Account no</th>
         <th>Name</th>
         <th>Email</th>
         <th>Bank Name</th>
+        <th>Balance</th>
         <th>Options</th>
       </tr>
     </thead>
     <tbody>
+
+      {data.map((item)=>
       <tr>
-        <td>1</td>
-        <td>Domenic</td>
-        <td>88,110</td>
-        <td>dcode</td>
-        <td><button>Check Info</button><button>Transfer</button></td>
+        <td>{item.accountno}</td>
+        <td>{item.name}</td>
+        <td>{item.bank}</td>
+        <td>{item.email}</td>
+        <td>{item.balance}</td>
+        <td><Button onClick={(e)=>settoggle(!toggle)}>Check Info</Button>
+        <Button onClick={(e) => settoggle(!toggle)}>Transfer</Button>
+        <Modal show={toggle}>
+        <Modal.Header> Transfer </Modal.Header>
+        <Modal.Body>
+            Hi, react modal is here.
+        </Modal.Body>
+        <Modal.Footer>
+            <Button onClick={(e)=> settoggle(!toggle)}>Close</Button>
+        </Modal.Footer>
+        </Modal>
+       </td>
       </tr>
-      <tr class="active-row">
-        <td>2</td>
-        <td>Sally</td>
-        <td>72,400</td>
-        <td>Students</td>
-        <td><button>Check Info</button><button>Transfer</button></td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Nick</td>
-        <td>52,300</td>
-        <td>dcode</td>
-        <td><button>Check Info</button><button>Transfer</button></td>
-      </tr>
+      )}
+      
     </tbody>
   </table>
   )

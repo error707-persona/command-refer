@@ -3,17 +3,17 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const mongoose = require("mongoose");
-
+const userModel = require("./models/userModel")
 const dotenv = require("dotenv");
 const cors = require("cors");
 
 dotenv.config();
 
-const port = process.env.PORT || 5020;
+const port = process.env.PORT || 9020;
 
 mongoose
   .connect(
-    "mongodb+srv://root:root@cluster0.qo4qm.mongodb.net/Crypton?retryWrites=true&w=majority",
+    "mongodb+srv://root:root@cluster0.qo4qm.mongodb.net/Netclan-data?retryWrites=true&w=majority",
     { autoCreate: true }
   )
   .then(() => console.log("Connected to MongoDB"))
@@ -31,6 +31,14 @@ app.use(logger("dev"));
 
 // Routes
 app.get("/", (req, res) => res.send("Hell World"))
+app.get('/user', async (req, res) => {
+    try {
+      const users = await userModel.find();
+      res.json(users);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  })
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
