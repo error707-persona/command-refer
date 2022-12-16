@@ -74,3 +74,21 @@
     color: #009879;
 }
 
+.headline{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.page{
+  height: 100vh;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero{
+  font-size: xx-large;
+}

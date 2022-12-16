@@ -40,6 +40,25 @@ app.get('/user', async (req, res) => {
     }
   })
 
+
+  app.post('/edit', async (req, res) => {
+    const { c_id } = req.params;
+    const { id, balance} = req.body;
+  
+    try {
+      const newNote = await userModel.updateOne(
+        { _id:id},
+        {$set:{
+          balance:balance
+        }});
+      res.json(newNote);
+     
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  })
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -49,4 +68,6 @@ app.listen(port, () => {
   console.log("Server started on: " + port);
 });
 
-// module.exports = app;
+
+
+

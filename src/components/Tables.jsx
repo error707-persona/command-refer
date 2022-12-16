@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Modal } from 'react-bootstrap';
-
+import { useContext } from 'react';
+import UserContext from '../context/UserContext';
 const Tables = () => {
+  const user = useContext(UserContext);
+  const [amount, setamount] = useState(0)
+  
    const [toggle, settoggle] = useState(false);
     const [data, setdata] = useState([{
             title:"Title",
@@ -16,13 +20,38 @@ const Tables = () => {
                 .then(res => {
                    
                     setdata(res.data);
-                    console.log(res.data)
+                    
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }, [])
-       
+
+        const EditData = (id, balance) => {
+
+          let data = null;
+          console.log(id, balance)
+          axios({
+              method: 'post',
+              url: `http://localhost:9020/edit`,
+              headers: {},
+              data: {
+  
+                  id: id,
+                  balance: balance,
+                  
+              }
+          }).then(res => {
+              data = res.data;
+              console.log("edit info", res.data)
+          })
+              .catch(err => {
+                  console.log(err);
+              })
+     
+      
+      if (data) return data;
+  }
   return (
     <table className="content-table">
     <thead>
@@ -44,14 +73,19 @@ const Tables = () => {
         <td>{item.bank}</td>
         <td>{item.email}</td>
         <td>{item.balance}</td>
-        <td><Button onClick={(e)=>settoggle(!toggle)}>Check Info</Button>
+        <td>
         <Button onClick={(e) => settoggle(!toggle)}>Transfer</Button>
         <Modal show={toggle}>
         <Modal.Header> Transfer </Modal.Header>
         <Modal.Body>
-            Hi, react modal is here.
+            <div className='headline'> 
+            
+            Amount : <input name="amount" onChange={(e)=>setamount(e.target.value)}></input></div>
         </Modal.Body>
         <Modal.Footer>
+            <Button onClick={(e)=> {EditData(user.userid.id, user.userid.balance-amount)
+            
+            }}>Pay</Button>
             <Button onClick={(e)=> settoggle(!toggle)}>Close</Button>
         </Modal.Footer>
         </Modal>
